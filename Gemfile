@@ -70,3 +70,7 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem 'net-imap'
+gem 'net-pop'
+gem 'net-smtp'
