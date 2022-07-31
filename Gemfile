@@ -74,3 +74,5 @@ end
 gem 'net-imap'
 gem 'net-pop'
 gem 'net-smtp'
+gem 'devise'
+gem 'acts_as_tenant'
