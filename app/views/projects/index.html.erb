@@ -1,6 +1,5 @@
-<p style="color: green"><%= notice %></p>
-
 <h1>Projects</h1>
+<h2>Acount tenant id:<%= ActsAsTenant.current_tenant.id %></h2>
 
 <div id="projects">
   <% @projects.each do |project| %>
