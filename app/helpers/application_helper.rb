@@ -27,4 +27,12 @@ module ApplicationHelper
     end
     flash_messages.join("\n").html_safe
   end
+
+  def link_to_sign_in_or_sign_out
+    unless current_user
+      link_to 'Sign in', new_user_session_path
+    else
+      link_to 'Sign out', destroy_user_session_path, data: { method: :delete }
+    end
+  end
 end

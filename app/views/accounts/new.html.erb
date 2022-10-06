@@ -1,0 +1,23 @@
+<%= form_with model: account  do |f| %>
+  <div class='form-group mt-3'>
+    <% account.errors.each do |error| %>
+      <li><strong><%= error.full_message %></strong></li>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :organization_name %>
+    <%= f.text_field :name, autofocus: true, required: true, class: 'form-control', placeholder: 'Organization Name' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :type_of_plan %>
+    <%= f.select :plan, Account.plans.keys.map { |plan| plan } %>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit 'Submit', class: 'btn btn-primary' %>
+  </div>
+<% end %>
+
+
