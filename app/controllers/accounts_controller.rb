@@ -18,6 +18,22 @@ class AccountsController < ApplicationController
     end
   end
 
+  def new_user_to_account
+    render :new_user_to_account
+  end
+
+  def add_user_to_account
+    new_user = User.find_by(email: params[:email])
+    current_organization = ActsAsTenant.current_tenant
+    if new_user.nil?
+      redirect_to new_user_to_account_path, alert: 'User not found :('
+    elsif current_organization.users << new_user
+      redirect_to root_path, notice: 'User was successfully added to your organization!'
+    else
+      redirect_to new_user_to_account_path, alert: 'Something went wrong.'
+    end
+  end
+
   private
 
   def account_params

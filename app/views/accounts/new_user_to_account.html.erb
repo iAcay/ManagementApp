@@ -1,0 +1,15 @@
+<div class="container-fluid col-8">
+  <div class="card mt-5">
+    <div class="card-header">
+      <h2 class='text-center'>Add user to organization</h2>
+    </div>
+    <div class="card-body">
+      <%= form_with(url: add_user_to_account_path) do |f| %>
+        <div class="form-group">
+          <%= f.text_field :email, required: true, placeholder: 'Email', class: 'form-control' %>
+        </div>
+        <%= f.submit 'Add', class: 'btn btn-primary mt-3' %>
+      <% end %>
+    </div>
+  </div>
+</div>
