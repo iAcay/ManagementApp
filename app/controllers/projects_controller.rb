@@ -1,70 +1,76 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: %i[ show edit update destroy ]
-
-  # GET /projects or /projects.json
+  before_action :organization_selected?, except: %i[index]
+  before_action :proper_organization_member, except: %i[index new create]
+  
   def index
-    @projects = Project.all
+    @projects = (ActsAsTenant.current_tenant.present? ? ActsAsTenant.current_tenant.projects : []) 
   end
 
-  # GET /projects/1 or /projects/1.json
   def show
+    render :show, locals: { project: project }
   end
 
-  # GET /projects/new
   def new
-    @project = Project.new
+    render :new, locals: { project: Project.new }
   end
 
-  # GET /projects/1/edit
   def edit
+    render :edit, locals: { project: project }
   end
 
-  # POST /projects or /projects.json
   def create
-    @project = Project.new(project_params)
+    project = Project.new(project_params)
 
     respond_to do |format|
-      if @project.save
-        format.html { redirect_to project_url(@project), notice: "Project was successfully created." }
-        format.json { render :show, status: :created, location: @project }
+      if project.save
+        format.html { redirect_to root_url, notice: "Project was successfully created." }
+        format.json { render :show, status: :created, location: project }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
+        format.html { render :new, locals: { project: project }, status: :unprocessable_entity }
+        format.json { render json: project.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /projects/1 or /projects/1.json
   def update
     respond_to do |format|
-      if @project.update(project_params)
-        format.html { redirect_to project_url(@project), notice: "Project was successfully updated." }
-        format.json { render :show, status: :ok, location: @project }
+      if project.update(project_params)
+        format.html { redirect_to project_url(project), notice: "Project was successfully updated." }
+        format.json { render :show, status: :ok, location: project }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
+        format.json { render json: project.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /projects/1 or /projects/1.json
   def destroy
-    @project.destroy
+    project.destroy
 
     respond_to do |format|
-      format.html { redirect_to projects_url, notice: "Project was successfully destroyed." }
+      format.html { redirect_to root_url, notice: "Project was successfully destroyed." }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project
-      @project = Project.find(params[:id])
+    def project
+      @project ||= Project.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def project_params
       params.require(:project).permit(:name, :title, :details, :expected_completion_date)
+    end
+
+    def organization_selected?
+      return if ActsAsTenant.current_tenant.present?
+
+      redirect_to root_path, alert: 'Only organization members can do that.'
+    end
+
+    def proper_organization_member
+      return if project.account == ActsAsTenant.current_tenant
+
+      redirect_to root_path, alert: 'You are not allowed.'
     end
 end
