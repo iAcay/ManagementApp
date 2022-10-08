@@ -1,8 +1,18 @@
-<%= render project %>
-
-<div>
-  <%= link_to "Edit this project", edit_project_path(@project) %> |
-  <%= link_to "Back to projects", projects_path %>
-
-  <%= button_to "Destroy this project", project, method: :delete %>
+<div class="card text-center">
+  <div class="card-header">
+    <h3><%= project.name %></h3>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"><%= project.title %></h5>
+    <p class="card-text"><small>Organization - <%= project.account.name %></p>
+    <p class="card-description"><%= project.details %></p>
+  </div>
+  <div class="card-footer text-muted">
+    Expected completion date: <%= project.expected_completion_date %>
+  </div>
+  <div>
+    <%= link_to 'Edit', edit_project_path(project), class: 'btn btn-primary' %> |
+    <%= link_to 'Back to projects', projects_path, class: 'btn btn-primary' %> |
+    <%= link_to 'Delete', project_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+  </div>
 </div>
