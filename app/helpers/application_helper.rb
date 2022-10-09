@@ -35,4 +35,8 @@ module ApplicationHelper
       link_to 'Sign out', destroy_user_session_path, data: { method: :delete }
     end
   end
+
+  def s3_link(account_id, artifact_key)
+    link_to artifact_key, "#{artifact_key}", target: 'new'
+  end
 end

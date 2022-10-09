@@ -1,4 +1,5 @@
 class Artifact < ApplicationRecord
+  before_save :upload_to_s3
   attr_accessor :upload
   belongs_to :project
 
@@ -9,6 +10,17 @@ class Artifact < ApplicationRecord
   validate :uploaded_file_size
 
   private
+
+  def upload_to_s3
+    s3 = Aws::S3::Resource.new(
+      access_key_id: Rails.application.credentials.dig(:aws, :access_key),
+      secret_access_key: Rails.application.credentials.dig(:aws, :secret_access_key),
+      region: Rails.application.credentials.dig(:aws, :region))
+    account_name = ActsAsTenant.current_tenant.name
+    obj = s3.bucket(Rails.application.credentials.dig(:aws, :bucket_name)).object("#{account_name}/#{upload.original_filename}")
+    obj.upload_file(upload.path)
+    self.key = obj.public_url
+  end
 
   def uploaded_file_size
     if upload
