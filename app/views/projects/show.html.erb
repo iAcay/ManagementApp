@@ -10,6 +10,10 @@
   <div class="card-footer text-muted">
     Expected completion date: <%= project.expected_completion_date %>
   </div>
+  
+  <h3>Artifacts:</h3>
+  <%= render 'artifacts/list', artifacts: @project.artifacts %>
+  
   <div>
     <%= link_to 'Edit', edit_project_path(project), class: 'btn btn-primary' %> |
     <%= link_to 'Back to projects', projects_path, class: 'btn btn-primary' %> |
