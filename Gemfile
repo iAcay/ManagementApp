@@ -44,6 +44,7 @@ gem "bootsnap", require: false
 gem 'twitter-bootstrap-rails'
 gem 'devise-bootstrap-views'
 gem 'jquery-rails'
+gem 'aws-sdk'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
