@@ -45,6 +45,7 @@ gem 'twitter-bootstrap-rails'
 gem 'devise-bootstrap-views'
 gem 'jquery-rails'
 gem 'aws-sdk'
+gem 'stripe'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
