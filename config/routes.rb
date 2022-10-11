@@ -8,5 +8,5 @@ Rails.application.routes.draw do
   get 'new_user_to_account', to: 'accounts#new_user_to_account'
   post 'add_user_to_account', to: 'accounts#add_user_to_account'
   post 'buy_premium_plan', to: 'checkout#buy_premium_plan'
-  post 'buy_premium_plan', to: 'webhooks#buy_premium_plan'
+  post 'premium_plan', to: 'webhooks#premium_plan'
 end
