@@ -7,4 +7,6 @@ Rails.application.routes.draw do
   resources :accounts, only: %i[new create]
   get 'new_user_to_account', to: 'accounts#new_user_to_account'
   post 'add_user_to_account', to: 'accounts#add_user_to_account'
+  post 'buy_premium_plan', to: 'checkout#buy_premium_plan'
+  post 'premium_plan', to: 'webhooks#premium_plan'
 end

@@ -39,4 +39,11 @@ module ApplicationHelper
   def s3_link(account_id, artifact_key)
     link_to artifact_key, "#{artifact_key}", target: 'new'
   end
+
+  def link_to_buy_premium_plan_payment_panel
+    current_account = ActsAsTenant.current_tenant
+    if current_account && current_account.plan_free?
+      button_to 'BECOME PREMIUM', buy_premium_plan_path, method: :post, data: { confirm: 'You will be redirected to a payment system.' }, class: 'btn btn-success'
+    end
+  end
 end
