@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   belongs_to :account, optional: true
+  has_one :administered_account, class_name: 'Account', foreign_key: :admin, inverse_of: :admin, dependent: :nullify
 
   after_create do
     customer = Stripe::Customer.create(email: email)

@@ -14,6 +14,7 @@ class AccountsController < ApplicationController
   def create
     account = Account.new(account_params)
     account.users << current_user
+    account.admin = current_user
 
     if account.save
       redirect_to root_path, notice: 'Your account was successfully configured!'
