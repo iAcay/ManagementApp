@@ -7,6 +7,10 @@ class AccountsController < ApplicationController
     end
   end
 
+  def edit
+    render :edit, locals: { account: account }
+  end
+
   def create
     account = Account.new(account_params)
     account.users << current_user
@@ -15,6 +19,22 @@ class AccountsController < ApplicationController
       redirect_to root_path, notice: 'Your account was successfully configured!'
     else
       render :new, locals: { account: account }
+    end
+  end
+
+  def update
+    if account.update(account_params)
+      redirect_to root_path, notice: 'Your account was successfully updated.'
+    else
+      render :edit, locals: { account: account }
+    end
+  end
+
+  def destroy
+    if account.destroy
+      redirect_to root_path, notice: 'Your organization was successfully deleted.'
+    else
+      redirect_to root_path, notice: 'Something went wrong :('
     end
   end
 
@@ -35,6 +55,10 @@ class AccountsController < ApplicationController
   end
 
   private
+
+  def account
+    @account ||= Account.find(params[:id])
+  end
 
   def account_params
     params.require(:account).permit(:name, :plan)

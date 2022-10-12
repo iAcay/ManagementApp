@@ -1,6 +1,7 @@
 <h3 class="text-center">Organization: <%= organization_name %></h3>
-<% if ActsAsTenant.current_tenant %>
+<% if account %>
   <%= link_to 'Add user to organization', new_user_to_account_path, class: 'btn btn-success pull-right'%>
+  <%= link_to 'Edit organization', edit_account_path(account), class: 'btn btn-primary pull-right'%>
   <h4>Members' email:</h4>
   <% organization_members.each do |member| %>
     <li><%= member.email %></li>
