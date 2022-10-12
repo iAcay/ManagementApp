@@ -44,6 +44,8 @@ module ApplicationHelper
     current_account = ActsAsTenant.current_tenant
     if current_account && current_account.plan_free?
       button_to 'BECOME PREMIUM', buy_premium_plan_path, method: :post, data: { confirm: 'You will be redirected to a payment system.' }, class: 'btn btn-success'
+    elsif current_account && current_account.plan_premium?
+      link_to "You're premium!", '#', class: 'btn btn-success'
     end
   end
 end
