@@ -83,3 +83,5 @@ gem 'net-smtp'
 gem 'devise'
 gem 'acts_as_tenant'
 
+
+gem "pundit", "~> 2.2"
