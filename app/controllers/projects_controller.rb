@@ -2,12 +2,11 @@ class ProjectsController < ApplicationController
   before_action :organization_selected?, except: %i[index]
   before_action :proper_organization_member, except: %i[index new create]
   
-  def index
-    @projects = (ActsAsTenant.current_tenant.present? ? ActsAsTenant.current_tenant.projects : []) 
-  end
-
   def show
-    render :show, locals: { project: project }
+    project_users = UserProject.where(project_id: project.id)
+    account = ActsAsTenant.current_tenant
+    potential_new_members = account.users - project.users
+    render :show, locals: { project: project, project_users: project_users, potential_new_members: potential_new_members }
   end
 
   def new
