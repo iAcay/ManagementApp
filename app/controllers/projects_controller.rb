@@ -2,12 +2,11 @@ class ProjectsController < ApplicationController
   before_action :organization_selected?, except: %i[index]
   before_action :proper_organization_member, except: %i[index new create]
   
-  def index
-    @projects = (ActsAsTenant.current_tenant.present? ? ActsAsTenant.current_tenant.projects : []) 
-  end
-
   def show
-    render :show, locals: { project: project }
+    project_users = UserProject.where(project_id: project.id)
+    account = ActsAsTenant.current_tenant
+    potential_new_members = account.users - project.users
+    render :show, locals: { project: project, project_users: project_users, potential_new_members: potential_new_members }
   end
 
   def new
@@ -15,12 +14,16 @@ class ProjectsController < ApplicationController
   end
 
   def edit
+    account = ActsAsTenant.current_tenant
+    authorize account
+
     render :edit, locals: { project: project }
   end
 
   def create
     project = Project.new(project_params)
-
+    project.users << current_user
+    
     respond_to do |format|
       if project.save
         format.html { redirect_to root_url, notice: "Project was successfully created." }
@@ -33,6 +36,9 @@ class ProjectsController < ApplicationController
   end
 
   def update
+    account = ActsAsTenant.current_tenant
+    authorize account
+
     respond_to do |format|
       if project.update(project_params)
         format.html { redirect_to project_url(project), notice: "Project was successfully updated." }
@@ -45,6 +51,9 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
+    account = ActsAsTenant.current_tenant
+    authorize account
+    
     project.destroy
 
     respond_to do |format|
