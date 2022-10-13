@@ -8,6 +8,8 @@ class AccountsController < ApplicationController
   end
 
   def edit
+    authorize account
+
     render :edit, locals: { account: account }
   end
 
@@ -24,6 +26,8 @@ class AccountsController < ApplicationController
   end
 
   def update
+    authorize account
+
     if account.update(account_params)
       redirect_to root_path, notice: 'Your account was successfully updated.'
     else
@@ -32,6 +36,7 @@ class AccountsController < ApplicationController
   end
 
   def destroy
+    authorize account 
     if account.destroy
       redirect_to root_path, notice: 'Your organization was successfully deleted.'
     else
@@ -40,15 +45,20 @@ class AccountsController < ApplicationController
   end
 
   def new_user_to_account
+    account = ActsAsTenant.current_tenant
+    authorize account
+
     render :new_user_to_account
   end
 
   def add_user_to_account
+    account = ActsAsTenant.current_tenant
+    authorize account
+
     new_user = User.find_by(email: params[:email])
-    current_organization = ActsAsTenant.current_tenant
     if new_user.nil?
       redirect_to new_user_to_account_path, alert: 'User not found :('
-    elsif current_organization.users << new_user
+    elsif account.users << new_user
       redirect_to root_path, notice: 'User was successfully added to your organization!'
     else
       redirect_to new_user_to_account_path, alert: 'Something went wrong.'
