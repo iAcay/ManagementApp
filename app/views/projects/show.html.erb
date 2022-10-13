@@ -25,7 +25,11 @@
         <% project_users.each do |project_user| %>
           <tr>
             <td><%= project_user.user.email %></td>
-            <td><%= link_to 'Remove', user_project_path(project_user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %></td>
+            <td>
+              <% if policy(project.account).destroy?%>
+                <%= link_to 'Remove', user_project_path(project_user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -42,7 +46,11 @@
         <% potential_new_members.each do |user| %>
           <tr>
             <td><%= user.email %></td>
-            <td><%= link_to 'Add', user_projects_path(user_project: { project: project, user: user }), method: :post, data: { confirm: 'Are you sure?' }, class: 'btn btn-success' %></td>
+            <td>
+              <% if policy(project.account).create? %>
+                <%= link_to 'Add', user_projects_path(user_project: { project: project, user: user }), method: :post, data: { confirm: 'Are you sure?' }, class: 'btn btn-success' %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

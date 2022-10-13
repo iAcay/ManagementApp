@@ -14,6 +14,9 @@ class ProjectsController < ApplicationController
   end
 
   def edit
+    account = ActsAsTenant.current_tenant
+    authorize account
+
     render :edit, locals: { project: project }
   end
 
@@ -33,6 +36,9 @@ class ProjectsController < ApplicationController
   end
 
   def update
+    account = ActsAsTenant.current_tenant
+    authorize account
+
     respond_to do |format|
       if project.update(project_params)
         format.html { redirect_to project_url(project), notice: "Project was successfully updated." }
@@ -45,6 +51,9 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
+    account = ActsAsTenant.current_tenant
+    authorize account
+    
     project.destroy
 
     respond_to do |format|

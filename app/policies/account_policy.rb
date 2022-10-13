@@ -3,6 +3,10 @@ class AccountPolicy < ApplicationPolicy
     user.administered_account == record
   end
 
+  def create?
+    edit?
+  end
+
   def update?
     edit?
   end

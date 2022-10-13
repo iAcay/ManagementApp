@@ -4,6 +4,9 @@ class UserProjectsController < ApplicationController
     user = User.find(params.dig(:user_project, :user).to_i)
     project = Project.find(params.dig(:user_project, :project).to_i)
     user_project = UserProject.new(user_id: user.id, project_id: project.id)
+    account = ActsAsTenant.current_tenant
+
+    authorize account
 
     respond_to do |format|
       if user_project.save
@@ -17,6 +20,9 @@ class UserProjectsController < ApplicationController
   end
 
   def destroy
+    account = ActsAsTenant.current_tenant
+    authorize account
+    
     user_project.destroy
 
     respond_to do |format|
