@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_12_191351) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_24_161154) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_191351) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_artifacts_on_project_id"
+  end
+
+  create_table "invitations", force: :cascade do |t|
+    t.integer "status", default: 0, null: false
+    t.bigint "giver_id", null: false
+    t.bigint "receiver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["giver_id"], name: "index_invitations_on_giver_id"
+    t.index ["receiver_id"], name: "index_invitations_on_receiver_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -69,6 +79,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_191351) do
 
   add_foreign_key "accounts", "users", column: "admin_id"
   add_foreign_key "artifacts", "projects"
+  add_foreign_key "invitations", "users", column: "giver_id"
+  add_foreign_key "invitations", "users", column: "receiver_id"
   add_foreign_key "user_projects", "projects"
   add_foreign_key "user_projects", "users"
   add_foreign_key "users", "accounts"
