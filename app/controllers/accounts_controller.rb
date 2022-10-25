@@ -46,22 +46,45 @@ class AccountsController < ApplicationController
 
   def new_user_to_account
     account = ActsAsTenant.current_tenant
+    invitations = account.invitations.where(status: :pending)
     authorize account
 
-    render :new_user_to_account
+    render :new_user_to_account, locals: { invitations: invitations }
   end
 
-  def add_user_to_account
+  def invite_user_to_account
     account = ActsAsTenant.current_tenant
     authorize account
+    giver = current_user
+    receiver = User.find_by(email: params[:receiver_email])
 
-    new_user = User.find_by(email: params[:email])
-    if new_user.nil?
+    if receiver.nil?
       redirect_to new_user_to_account_path, alert: 'User not found :('
-    elsif account.users << new_user
-      redirect_to root_path, notice: 'User was successfully added to your organization!'
+    elsif Invitation.create(giver: giver, receiver: receiver, account: account)
+      redirect_to new_user_to_account_path, notice: 'User was invited to your organization!'
     else
       redirect_to new_user_to_account_path, alert: 'Something went wrong.'
+    end
+  end
+
+  def cancel_invitation
+    invitation = Invitation.find(params[:invitation])
+
+    invitation.destroy
+
+    redirect_to new_user_to_account_path, notice: 'Invitation was canceled.'
+  end
+
+  def recognize_invitation
+    invitation = Invitation.find(params[:invitation])
+    
+    if params[:decision] == 'accept'
+      invitation.account.users << invitation.receiver
+      invitation.status_accepted!
+      redirect_to root_path, notice: "You are member of #{invitation.account.name} now."
+    else
+      invitation.status_rejected!
+      redirect_to invitations_path, notice: "You rejected invitation from #{invitation.account.name}."
     end
   end
 

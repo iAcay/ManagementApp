@@ -1,5 +1,5 @@
 <h3 class="text-center">Organization: <%= organization_name %></h3>
-<% if policy(account).edit? %>
+<% if account && policy(account).edit? %>
   <%= link_to 'Add user to organization', new_user_to_account_path, class: 'btn btn-success pull-right'%>
   <%= link_to 'Edit organization', edit_account_path(account), class: 'btn btn-primary pull-right'%>
   <h4>Members' email:</h4>

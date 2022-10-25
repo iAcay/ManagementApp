@@ -10,8 +10,11 @@ Rails.application.routes.draw do
     end
   end
   resources :accounts, except: %i[index show]
+  resources :invitations, only: %i[index]
   get 'new_user_to_account', to: 'accounts#new_user_to_account'
-  post 'add_user_to_account', to: 'accounts#add_user_to_account'
+  post 'invite_user_to_account', to: 'accounts#invite_user_to_account'
+  delete 'cancel_invitation', to: 'accounts#cancel_invitation'
+  post 'recognize_invitation', to: 'accounts#recognize_invitation'
   post 'buy_premium_plan', to: 'checkout#buy_premium_plan'
   post 'premium_plan', to: 'webhooks#premium_plan'
 end

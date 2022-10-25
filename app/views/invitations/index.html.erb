@@ -1,0 +1,22 @@
+<h3 class='text-center'>Invitations</h3>
+<table class='table table-stripper'>
+  <thead>
+    <tr>
+      <th>Organization</th>
+      <th>Organization's admin</th>
+      <th colspan="2">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% invitations.each do |invitation| %>
+      <tr>
+        <td><%= invitation.account.name %></td>
+        <td><%= invitation.account.admin.email %></td>
+        <td>
+          <%= link_to 'Accept', recognize_invitation_path(invitation: invitation, decision: :accept), method: :post, class: 'btn btn-success' %>
+          <%= link_to 'Reject', recognize_invitation_path(invitation: invitation, decision: :reject), method: :post, class: 'btn btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

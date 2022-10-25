@@ -12,6 +12,7 @@
           <li><%= link_to 'Sign Up', new_user_registration_path %></li>
         <% else %>
           <li><%= link_to current_user.email, '#' %></li>
+          <li><%= link_to 'Invitations', invitations_path %></li>
         <% end %> 
         <li><%= link_to_sign_in_or_sign_out %></li>
         <li><%= link_to_buy_premium_plan_payment_panel %></li>

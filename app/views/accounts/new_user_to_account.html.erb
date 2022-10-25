@@ -1,15 +1,35 @@
 <div class="container-fluid col-8">
   <div class="card mt-5">
     <div class="card-header">
-      <h2 class='text-center'>Add user to organization</h2>
+      <h2 class='text-center'>Invite user to organization</h2>
     </div>
     <div class="card-body">
-      <%= form_with(url: add_user_to_account_path) do |f| %>
+      <%= form_with(url: invite_user_to_account_path) do |f| %>
         <div class="form-group">
-          <%= f.text_field :email, required: true, placeholder: 'Email', class: 'form-control' %>
+          <%= f.text_field :receiver_email, required: true, placeholder: 'Email', class: 'form-control' %>
         </div>
-        <%= f.submit 'Add', class: 'btn btn-primary mt-3' %>
+        <%= f.submit 'Invite', class: 'btn btn-primary mt-3' %>
       <% end %>
     </div>
   </div>
 </div>
+
+<h3>Invited users</h3>
+<table class='table table-stripper'>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% invitations.each do |invitation| %>
+      <tr>
+        <td><%= invitation.receiver.email %></td>
+        <td>
+          <%= link_to 'Cancel', cancel_invitation_path(invitation: invitation), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-warning' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

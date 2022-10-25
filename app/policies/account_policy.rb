@@ -19,6 +19,10 @@ class AccountPolicy < ApplicationPolicy
     edit?
   end
 
+  def invite_user_to_account?
+    edit?
+  end
+
   def add_user_to_account?
     edit?
   end
